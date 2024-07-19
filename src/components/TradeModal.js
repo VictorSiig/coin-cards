@@ -26,7 +26,7 @@ const TradeModal = ({ userId, onClose, fetchData }) => {
         dateEntered,
         dateSold,
         tradeLasted,
-        ongoing
+        ongoing: true
       });
 
       // Remove initial trade if exists
