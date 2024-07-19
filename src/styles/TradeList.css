@@ -1,0 +1,71 @@
+/* src/components/TradeList.css */
+
+.trade-list-container {
+  display: grid;
+  place-items: center;
+  width: 100%;
+}
+
+.trade-card {
+  background: #fff;
+  width: 60%;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f4f4f4;
+}
+
+/* Remove alternating row colors */
+tbody tr {
+  background-color: inherit;
+}
+
+/* Custom styles for ongoing, positive, and negative trades */
+.ongoing {
+  background-color: #cce5ff; /* Blue for ongoing trades */
+}
+
+.positive {
+  background-color: #d4edda; /* Green for sold with profit */
+}
+
+.negative {
+  background-color: #f8d7da; /* Red for sold with loss */
+}
+
+
+/* Button styling to fit within the table cell */
+.sell-button {
+  height: 100%;
+  width: 100%;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.sell-button:hover {
+  background-color: #0056b3;
+}
+
+.sell-button:focus {
+  outline: none;
+}
