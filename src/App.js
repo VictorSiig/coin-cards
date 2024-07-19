@@ -1,23 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.js
+import React from 'react';
+import Login from './pages/Login';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { useState, useEffect } from 'react';
 
 function App() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {user ? (
+        <div>
+          <h1>Welcome, {user.email}</h1>
+          <button onClick={() => getAuth().signOut()}>Sign Out</button>
+        </div>
+      ) : (
+        <Login />
+      )}
     </div>
   );
 }
