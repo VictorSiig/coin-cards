@@ -1,8 +1,9 @@
-// src/Login.js
+// src/pages/Login.js
 import React, { useState } from 'react';
-import { auth } from '../utilities/firebase';
+import { auth, db } from '../utilities/firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
-import '../styles/Login.css'; // You can create this file for styling
+import { setDoc, doc, collection } from 'firebase/firestore';
+import '../styles/Login.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -14,7 +15,28 @@ const Login = () => {
     e.preventDefault();
     try {
       if (isRegistering) {
-        await createUserWithEmailAndPassword(auth, email, password);
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        
+        // Create user document in Firestore
+        await setDoc(doc(db, 'users', user.uid), {
+          email: user.email,
+          createdAt: new Date().toISOString(),
+          // Add any other user-specific fields here
+        });
+        
+        // Optionally, create an initial document in the trades sub-collection
+        await setDoc(doc(collection(db, 'users', user.uid, 'trades'), 'initialTrade'), {
+          coin: 'Bitcoin',
+          bought: 0,
+          sold: 0,
+          difference: 0,
+          profits: 0,
+          dateEntered: new Date().toISOString(),
+          dateSold: null,
+          tradeLasted: null,
+          ongoing: true
+        });
       } else {
         await signInWithEmailAndPassword(auth, email, password);
       }

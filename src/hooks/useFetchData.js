@@ -1,31 +1,43 @@
 // src/hooks/useFetchData.js
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../utilities/firebase';
 
-export const useFetchData = (collectionName) => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
+export const useFetchData = (userId, collectionName) => {
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+  
+    const fetchData = useCallback(async () => {
+      if (!userId) return;
       try {
-        const querySnapshot = await getDocs(collection(db, collectionName));
+        const querySnapshot = await getDocs(collection(db, `users/${userId}/${collectionName}`));
         const fetchedData = querySnapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
         }));
-        setData(fetchedData);
+  
+        // Group data by coin
+        const groupedData = fetchedData.reduce((acc, trade) => {
+          const { coin } = trade;
+          if (!acc[coin]) {
+            acc[coin] = [];
+          }
+          acc[coin].push(trade);
+          return acc;
+        }, {});
+  
+        setData(groupedData);
         setLoading(false);
       } catch (err) {
         setError(err);
         setLoading(false);
       }
-    };
-
-    fetchData();
-  }, [collectionName]);
-
-  return { data, loading, error };
-};
+    }, [userId, collectionName]);
+  
+    useEffect(() => {
+      fetchData();
+    }, [fetchData]);
+  
+    return { data, loading, error, fetchData };
+  };
