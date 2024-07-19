@@ -1,14 +1,14 @@
 // src/App.js
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { auth } from './utilities/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 import Login from './pages/Login';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { useState, useEffect } from 'react';
+import TradeList from './components/TradeList';
 
 function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
@@ -25,7 +25,8 @@ function App() {
       {user ? (
         <div>
           <h1>Welcome, {user.email}</h1>
-          <button onClick={() => getAuth().signOut()}>Sign Out</button>
+          <button onClick={() => auth.signOut()}>Sign Out</button>
+          <TradeList />
         </div>
       ) : (
         <Login />
