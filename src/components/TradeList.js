@@ -1,9 +1,11 @@
 // src/components/TradeList.js
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { collection, getDocs } from "firebase/firestore";
 import { useFetchData } from "../hooks/useFetchData";
 import "../styles/TradeList.css";
 import TradeModal from "./TradeModal";
 import SellTradeModal from "./SellTradeModal";
+import { db } from "../utilities/firebase";
 import { AuthContext } from "../context/AuthContext";
 
 const TradeList = () => {
@@ -22,6 +24,27 @@ const TradeList = () => {
     key: null,
     direction: "default",
   });
+  const [existingCoins, setExistingCoins] = useState([]);
+
+  const fetchCoinNames = async () => {
+    if (!user) return;
+    try {
+      const querySnapshot = await getDocs(
+        collection(db, "users", user.uid, "trades")
+      );
+      const coins = new Set();
+      querySnapshot.forEach((doc) => {
+        coins.add(doc.data().coin);
+      });
+      setExistingCoins(Array.from(coins));
+    } catch (err) {
+      console.error("Error fetching coin names: ", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchCoinNames();
+  }, [user]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error loading trades: {error.message}</p>;
@@ -47,7 +70,7 @@ const TradeList = () => {
 
   const sortedTrades = (trades) => {
     if (sortConfig.key && sortConfig.direction !== "default") {
-      return trades.sort((a, b) => {
+      return [...trades].sort((a, b) => {
         let aValue = a[sortConfig.key];
         let bValue = b[sortConfig.key];
 
@@ -62,7 +85,7 @@ const TradeList = () => {
         if (aValue > bValue) {
           return sortConfig.direction === "ascending" ? 1 : -1;
         }
-        return originalData;
+        return 0;
       });
     }
     return trades;
@@ -112,6 +135,8 @@ const TradeList = () => {
           userId={user.uid}
           onClose={() => setIsModalOpen(false)}
           fetchData={fetchData}
+          existingCoins={existingCoins}
+          fetchCoinNames={fetchCoinNames} // Pass the function to fetch coin names
         />
       )}
       {isSellModalOpen && (
@@ -149,6 +174,9 @@ const TradeList = () => {
                 <th onClick={() => requestSort("tradeLasted")}>
                   Trade Lasted {getSortSymbol("tradeLasted")}
                 </th>
+                <th onClick={() => requestSort("ongoing")}>
+                  Ongoing {getSortSymbol("ongoing")}
+                </th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -162,6 +190,7 @@ const TradeList = () => {
                   <td>{trade.dateEntered}</td>
                   <td>{trade.dateSold}</td>
                   <td>{trade.tradeLasted}</td>
+                  <td>{trade.ongoing ? "Yes" : "No"}</td>
                   <td>
                     {!trade.sold && (
                       <button

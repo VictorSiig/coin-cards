@@ -1,17 +1,13 @@
 // src/components/TradeModal.js
 import React, { useState } from 'react';
-import { collection, doc, setDoc, deleteDoc } from 'firebase/firestore';
+import { collection, doc, setDoc, deleteDoc} from 'firebase/firestore';
 import { db } from '../utilities/firebase';
 import '../styles/TradeModal.css';
 
-const TradeModal = ({ userId, onClose, fetchData }) => {
+const TradeModal = ({ userId, onClose, fetchData, existingCoins, fetchCoinNames }) => {
   const [coin, setCoin] = useState('');
   const [bought, setBought] = useState('');
-  const [sold, setSold] = useState('');
   const [dateEntered, setDateEntered] = useState('');
-  const [dateSold, setDateSold] = useState('');
-  const [tradeLasted, setTradeLasted] = useState('');
-  const [ongoing, setOngoing] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,12 +16,12 @@ const TradeModal = ({ userId, onClose, fetchData }) => {
       await setDoc(tradeRef, {
         coin,
         bought: parseFloat(bought),
-        sold: parseFloat(sold),
-        difference: parseFloat(sold) - parseFloat(bought),
-        profits: parseFloat(sold) - parseFloat(bought),
+        sold: null,
+        difference: null,
+        profits: null,
         dateEntered,
-        dateSold,
-        tradeLasted,
+        dateSold: null,
+        tradeLasted: null,
         ongoing: true
       });
 
@@ -34,6 +30,7 @@ const TradeModal = ({ userId, onClose, fetchData }) => {
       await deleteDoc(initialTradeRef);
 
       fetchData(); // Refresh data
+      fetchCoinNames(); // Fetch updated list of coin names
       onClose();
     } catch (err) {
       console.error('Error adding trade: ', err);
@@ -51,8 +48,14 @@ const TradeModal = ({ userId, onClose, fetchData }) => {
               type="text"
               value={coin}
               onChange={(e) => setCoin(e.target.value)}
+              list="coin-suggestions"
               required
             />
+            <datalist id="coin-suggestions">
+              {existingCoins.map((coinName) => (
+                <option key={coinName} value={coinName} />
+              ))}
+            </datalist>
           </div>
           <div>
             <label>Bought</label>
