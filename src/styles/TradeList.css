@@ -44,3 +44,25 @@ tbody tr {
 .negative {
   background-color: #f8d7da; /* Red for sold with loss */
 }
+
+
+/* Button styling to fit within the table cell */
+.sell-button {
+  height: 100%;
+  width: 100%;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.sell-button:hover {
+  background-color: #0056b3;
+}
+
+.sell-button:focus {
+  outline: none;
+}

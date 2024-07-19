@@ -135,9 +135,6 @@ const TradeList = () => {
                 <th onClick={() => requestSort('tradeLasted')}>
                   Trade Lasted {getSortSymbol('tradeLasted')}
                 </th>
-                <th onClick={() => requestSort('ongoing')}>
-                  Ongoing {getSortSymbol('ongoing')}
-                </th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -151,9 +148,8 @@ const TradeList = () => {
                   <td>{trade.dateEntered}</td>
                   <td>{trade.dateSold}</td>
                   <td>{trade.tradeLasted}</td>
-                  <td>{trade.ongoing ? 'Yes' : 'No'}</td>
                   <td>
-                    {!trade.sold && <button onClick={() => handleSell(trade)}>Sell</button>}
+                    {!trade.sold && <button className="sell-button" onClick={() => handleSell(trade)}>Sell</button>}
                   </td>
                 </tr>
               ))}
