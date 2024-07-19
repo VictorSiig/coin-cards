@@ -53,7 +53,6 @@ const TradeList = () => {
                   <th>Date Entered</th>
                   <th>Date Sold</th>
                   <th>Trade Lasted</th>
-                  <th>Ongoing</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -67,7 +66,6 @@ const TradeList = () => {
                     <td>{trade.dateEntered}</td>
                     <td>{trade.dateSold}</td>
                     <td>{trade.tradeLasted}</td>
-                    <td>{trade.ongoing ? 'Yes' : 'No'}</td>
                     <td>
                       {!trade.sold && <button onClick={() => handleSell(trade)}>Sell</button>}
                     </td>
