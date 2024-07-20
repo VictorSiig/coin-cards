@@ -11,7 +11,6 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/trades" element={<TradeList />} />
-          {/* Add more routes as needed */}
         </Routes>
       </div>
     </Router>
