@@ -28,7 +28,7 @@ const Login = () => {
         
         // Optionally, create an initial document in the trades sub-collection
         await setDoc(doc(collection(db, 'users', user.uid, 'trades'), 'initialTrade'), {
-          coin: 'Bitcoin',
+          coin: 'Filler text',
           bought: 0,
           sold: 0,
           difference: 0,
