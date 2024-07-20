@@ -149,7 +149,7 @@ const TradeList = () => {
       )}
       {Object.keys(groupedTrades).map((coin) => (
         <div key={coin} className="trade-card">
-          <h3>{coin}</h3>
+          <h3>${coin.toLocaleUpperCase()}</h3>
           <table>
             <thead>
               <tr>
