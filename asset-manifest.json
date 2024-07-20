@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/coin-cards/static/css/main.61ee40aa.css",
+    "main.js": "/coin-cards/static/js/main.c33d7e38.js",
+    "static/js/453.47fe2e18.chunk.js": "/coin-cards/static/js/453.47fe2e18.chunk.js",
+    "index.html": "/coin-cards/index.html",
+    "main.61ee40aa.css.map": "/coin-cards/static/css/main.61ee40aa.css.map",
+    "main.c33d7e38.js.map": "/coin-cards/static/js/main.c33d7e38.js.map",
+    "453.47fe2e18.chunk.js.map": "/coin-cards/static/js/453.47fe2e18.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.61ee40aa.css",
+    "static/js/main.c33d7e38.js"
+  ]
+}
