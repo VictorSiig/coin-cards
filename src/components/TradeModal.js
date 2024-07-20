@@ -1,6 +1,5 @@
-// src/components/TradeModal.js
 import React, { useState } from 'react';
-import { collection, doc, setDoc, deleteDoc} from 'firebase/firestore';
+import { collection, doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../utilities/firebase';
 import '../styles/TradeModal.css';
 

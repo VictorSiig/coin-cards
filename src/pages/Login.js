@@ -1,5 +1,5 @@
-// src/pages/Login.js
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../utilities/firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { setDoc, doc, collection } from 'firebase/firestore';
@@ -10,6 +10,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
   const [error, setError] = useState('');
+  const navigate = useNavigate(); // Use navigate for routing
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,8 +38,11 @@ const Login = () => {
           tradeLasted: null,
           ongoing: true
         });
+        
+        navigate('/trades'); // Navigate to the trades page after registration
       } else {
         await signInWithEmailAndPassword(auth, email, password);
+        navigate('/trades'); // Navigate to the trades page after login
       }
     } catch (err) {
       setError(err.message);
