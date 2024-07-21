@@ -6,7 +6,7 @@ import './styles/Login.css';
 
 function App() {
   return (
-    <Router basename="/coin-cards">
+    <Router>
       <div className="Login">
         <Routes>
           <Route path="/" element={<Login />} />
