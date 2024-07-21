@@ -13,7 +13,7 @@ const TradeModal = ({ userId, onClose, fetchData, existingCoins, fetchCoinNames 
     try {
       const tradeRef = doc(collection(db, 'users', userId, 'trades'));
       await setDoc(tradeRef, {
-        coin,
+        coin: coin.toUpperCase(),
         bought: parseFloat(bought),
         sold: null,
         difference: null,
