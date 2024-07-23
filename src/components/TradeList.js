@@ -118,12 +118,20 @@ const TradeList = () => {
         return "▼";
       }
     }
-    return "▲▼";
+    return "";
   };
 
   const formatProfits = (profits) => {
     if (profits == null || isNaN(profits)) return ""; // Handle null, undefined, or non-numeric values
     return parseFloat(parseFloat(profits).toFixed(2)).toString() + "%";
+  };
+
+  const calculateStats = (trades) => {
+    const totalBought = trades.reduce((sum, trade) => sum + (trade.bought || 0), 0);
+    const totalSold = trades.reduce((sum, trade) => sum + (trade.sold || 0), 0);
+    const totalTrades = trades.length;
+    const totalProfits = trades.reduce((sum, trade) => sum + (trade.profits || 0), 0);
+    return { totalBought, totalSold, totalTrades, totalProfits };
   };
 
   return (
@@ -147,66 +155,76 @@ const TradeList = () => {
           fetchData={fetchData}
         />
       )}
-      {Object.keys(groupedTrades).map((coin) => (
-        <div key={coin} className="trade-card">
-          <h3>${coin.toLocaleUpperCase()}</h3>
-          <table>
-            <thead>
-              <tr>
-                <th onClick={() => requestSort("bought")}>
-                  Bought {getSortSymbol("bought")}
-                </th>
-                <th onClick={() => requestSort("sold")}>
-                  Sold {getSortSymbol("sold")}
-                </th>
-                <th onClick={() => requestSort("difference")}>
-                  Difference {getSortSymbol("difference")}
-                </th>
-                <th onClick={() => requestSort("profits")}>
-                  Profits {getSortSymbol("profits")}
-                </th>
-                <th onClick={() => requestSort("dateEntered")}>
-                  Date Entered {getSortSymbol("dateEntered")}
-                </th>
-                <th onClick={() => requestSort("dateSold")}>
-                  Date Sold {getSortSymbol("dateSold")}
-                </th>
-                <th onClick={() => requestSort("tradeLasted")}>
-                  Trade Lasted {getSortSymbol("tradeLasted")}
-                </th>
-                <th onClick={() => requestSort("ongoing")}>
-                  Ongoing {getSortSymbol("ongoing")}
-                </th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sortedTrades(groupedTrades[coin] || []).map((trade) => (
-                <tr key={trade.id} className={getRowClass(trade)}>
-                  <td>{trade.bought}</td>
-                  <td>{trade.sold}</td>
-                  <td>{trade.difference}</td>
-                  <td>{formatProfits(trade.profits)}</td>
-                  <td>{trade.dateEntered}</td>
-                  <td>{trade.dateSold}</td>
-                  <td>{trade.tradeLasted}</td>
-                  <td>{trade.ongoing ? "Yes" : "No"}</td>
-                  <td>
-                    {!trade.sold && (
-                      <button
-                        className="sell-button"
-                        onClick={() => handleSell(trade)}
-                      >
-                        Sell
-                      </button>
-                    )}
-                  </td>
+      {Object.keys(groupedTrades).map((coin) => {
+        const trades = groupedTrades[coin] || [];
+        const stats = calculateStats(trades);
+        return (
+          <div key={coin} className="trade-card">
+            <h3>${coin.toUpperCase()}</h3>
+            <div className="trade-stats">
+              <p>Total Trades: {stats.totalTrades}</p>
+              <p>Total Bought: $ {stats.totalBought}</p>
+              <p>Total Sold: $ {stats.totalSold}</p>
+              <p>Total Profits: {formatProfits(stats.totalProfits)}</p>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th onClick={() => requestSort("bought")}>
+                    Bought {getSortSymbol("bought")}
+                  </th>
+                  <th onClick={() => requestSort("sold")}>
+                    Sold {getSortSymbol("sold")}
+                  </th>
+                  <th onClick={() => requestSort("difference")}>
+                    Difference {getSortSymbol("difference")}
+                  </th>
+                  <th onClick={() => requestSort("profits")}>
+                    Profits {getSortSymbol("profits")}
+                  </th>
+                  <th onClick={() => requestSort("dateEntered")}>
+                    Date Entered {getSortSymbol("dateEntered")}
+                  </th>
+                  <th onClick={() => requestSort("dateSold")}>
+                    Date Sold {getSortSymbol("dateSold")}
+                  </th>
+                  <th onClick={() => requestSort("tradeLasted")}>
+                    Trade Lasted {getSortSymbol("tradeLasted")}
+                  </th>
+                  <th onClick={() => requestSort("ongoing")}>
+                    Ongoing {getSortSymbol("ongoing")}
+                  </th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ))}
+              </thead>
+              <tbody>
+                {sortedTrades(trades).map((trade) => (
+                  <tr key={trade.id} className={getRowClass(trade)}>
+                    <td>{trade.bought}</td>
+                    <td>{trade.sold}</td>
+                    <td>{trade.difference}</td>
+                    <td>{formatProfits(trade.profits)}</td>
+                    <td>{trade.dateEntered}</td>
+                    <td>{trade.dateSold}</td>
+                    <td>{trade.tradeLasted}</td>
+                    <td>{trade.ongoing ? "Yes" : "No"}</td>
+                    <td>
+                      {!trade.sold && (
+                        <button
+                          className="sell-button"
+                          onClick={() => handleSell(trade)}
+                        >
+                          Sell
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
+      })}
     </div>
   );
 };
