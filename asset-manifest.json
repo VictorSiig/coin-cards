@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/coin-cards/static/css/main.c02b5497.css",
-    "main.js": "/coin-cards/static/js/main.167ae48e.js",
+    "main.js": "/coin-cards/static/js/main.be16b7d8.js",
     "static/js/453.47fe2e18.chunk.js": "/coin-cards/static/js/453.47fe2e18.chunk.js",
     "index.html": "/coin-cards/index.html",
     "main.c02b5497.css.map": "/coin-cards/static/css/main.c02b5497.css.map",
-    "main.167ae48e.js.map": "/coin-cards/static/js/main.167ae48e.js.map",
+    "main.be16b7d8.js.map": "/coin-cards/static/js/main.be16b7d8.js.map",
     "453.47fe2e18.chunk.js.map": "/coin-cards/static/js/453.47fe2e18.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.c02b5497.css",
-    "static/js/main.167ae48e.js"
+    "static/js/main.be16b7d8.js"
   ]
 }
