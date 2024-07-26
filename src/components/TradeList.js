@@ -149,7 +149,6 @@ const TradeList = () => {
     );
     return { totalBought, totalSold, totalTrades, totalProfits };
   };
-  
 
   const calculateDifference = (bought, sold) => sold - bought;
 
@@ -176,34 +175,44 @@ const TradeList = () => {
   const handleBlur = async () => {
     if (!editingField) return;
     const { tradeId, field } = editingField;
-  
+
     const tradeRef = doc(db, "users", user.uid, "trades", tradeId);
     const tradeDoc = await getDoc(tradeRef); // Use getDoc to fetch a single document
-  
+
     let updatedFields = {
-      [field]: field === "bought" || field === "sold" ? Number(editingValue) : editingValue,
+      [field]:
+        field === "bought" || field === "sold"
+          ? Number(editingValue)
+          : editingValue,
     };
-  
-    if (field === "bought" || field === "sold" || field === "dateEntered" || field === "dateSold") {
+
+    if (
+      field === "bought" ||
+      field === "sold" ||
+      field === "dateEntered" ||
+      field === "dateSold"
+    ) {
       const updatedTrade = { ...tradeDoc.data(), [field]: editingValue };
       const { bought, sold, dateEntered, dateSold } = updatedTrade;
-  
+
       if (bought && sold) {
-        updatedFields.difference = calculateDifference(Number(bought), Number(sold));
+        updatedFields.difference = calculateDifference(
+          Number(bought),
+          Number(sold)
+        );
         updatedFields.profits = calculateProfits(Number(bought), Number(sold));
       }
       if (dateEntered && dateSold) {
         updatedFields.tradeLasted = calculateTradeLasted(dateEntered, dateSold);
       }
     }
-  
+
     await updateDoc(tradeRef, updatedFields);
-  
+
     fetchData(); // Refresh data
     setEditingField(null);
     setEditingValue("");
   };
-  
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
@@ -277,38 +286,94 @@ const TradeList = () => {
               <tbody>
                 {sortedTrades(trades).map((trade) => (
                   <tr key={trade.id} className={getRowClass(trade)}>
-                    {[
-                      "bought",
-                      "sold",
-                      "dateEntered",
-                      "dateSold",
-                      "ongoing",
-                    ].map((field) => (
-                      <td
-                        key={field}
-                        onDoubleClick={() =>
-                          handleDoubleClick(trade.id, field, trade[field])
-                        }
-                      >
-                        {editingField &&
-                        editingField.tradeId === trade.id &&
-                        editingField.field === field ? (
-                          <input
-                            type="text"
-                            value={editingValue}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            onKeyPress={handleKeyPress}
-                            autoFocus
-                          />
-                        ) : (
-                          trade[field]
-                        )}
-                      </td>
-                    ))}
+                    <td
+                      onDoubleClick={() =>
+                        handleDoubleClick(trade.id, "bought", trade.bought)
+                      }
+                    >
+                      {editingField &&
+                      editingField.tradeId === trade.id &&
+                      editingField.field === "bought" ? (
+                        <input
+                          type="text"
+                          value={editingValue}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          onKeyPress={handleKeyPress}
+                          autoFocus
+                        />
+                      ) : (
+                        trade.bought
+                      )}
+                    </td>
+                    <td
+                      onDoubleClick={() =>
+                        handleDoubleClick(trade.id, "sold", trade.sold)
+                      }
+                    >
+                      {editingField &&
+                      editingField.tradeId === trade.id &&
+                      editingField.field === "sold" ? (
+                        <input
+                          type="text"
+                          value={editingValue}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          onKeyPress={handleKeyPress}
+                          autoFocus
+                        />
+                      ) : (
+                        trade.sold
+                      )}
+                    </td>
                     <td>{trade.difference}</td>
                     <td>{formatProfits(trade.profits)}</td>
+                    <td
+                      onDoubleClick={() =>
+                        handleDoubleClick(
+                          trade.id,
+                          "dateEntered",
+                          trade.dateEntered
+                        )
+                      }
+                    >
+                      {editingField &&
+                      editingField.tradeId === trade.id &&
+                      editingField.field === "dateEntered" ? (
+                        <input
+                          type="text"
+                          value={editingValue}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          onKeyPress={handleKeyPress}
+                          autoFocus
+                        />
+                      ) : (
+                        trade.dateEntered
+                      )}
+                    </td>
+                    <td
+                      onDoubleClick={() =>
+                        handleDoubleClick(trade.id, "dateSold", trade.dateSold)
+                      }
+                    >
+                      {editingField &&
+                      editingField.tradeId === trade.id &&
+                      editingField.field === "dateSold" ? (
+                        <input
+                          type="text"
+                          value={editingValue}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          onKeyPress={handleKeyPress}
+                          autoFocus
+                        />
+                      ) : (
+                        trade.dateSold
+                      )}
+                    </td>
                     <td>{trade.tradeLasted}</td>
+                    <td>{trade.ongoing ? "Yes" : "No"}</td>
                     <td>
                       {!trade.sold && (
                         <button
