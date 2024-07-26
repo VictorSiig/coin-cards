@@ -143,10 +143,9 @@ const TradeList = () => {
       0
     );
     const totalTrades = trades.length;
-    const totalProfits = trades.reduce(
-      (sum, trade) => sum + Number(trade.profits || 0),
-      0
-    );
+    const totalProfits =
+      totalBought > 0 ? ((totalSold - totalBought) / totalBought) * 100 : 0;
+
     return { totalBought, totalSold, totalTrades, totalProfits };
   };
 
@@ -177,7 +176,7 @@ const TradeList = () => {
     const { tradeId, field } = editingField;
 
     const tradeRef = doc(db, "users", user.uid, "trades", tradeId);
-    const tradeDoc = await getDoc(tradeRef); // Use getDoc to fetch a single document
+    const tradeDoc = await getDoc(tradeRef);
 
     let updatedFields = {
       [field]:
