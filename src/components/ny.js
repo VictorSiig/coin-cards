@@ -2,10 +2,10 @@ import React, { useState, useContext, useEffect } from "react";
 import {
   collection,
   getDocs,
-  getDoc,
   doc,
+  getDoc,
   updateDoc,
-} from "firebase/firestore";
+} from "firebase/firestore"; // Ensure getDoc is imported
 import { useFetchData } from "../hooks/useFetchData";
 import "../styles/TradeList.css";
 import TradeModal from "./TradeModal";
@@ -31,7 +31,7 @@ const TradeList = () => {
   });
   const [existingCoins, setExistingCoins] = useState([]);
   const [editingField, setEditingField] = useState(null);
-  const [editingValue, setEditingValue] = useState("");  
+  const [editingValue, setEditingValue] = useState("");
   const [filterConfig, setFilterConfig] = useState({
     coin: "",
     ongoing: "all",
@@ -129,7 +129,7 @@ const TradeList = () => {
         return "▼";
       }
     }
-    return "";
+    return "▲▼";
   };
 
   const formatProfits = (profits) => {
@@ -181,7 +181,7 @@ const TradeList = () => {
     const { tradeId, field } = editingField;
 
     const tradeRef = doc(db, "users", user.uid, "trades", tradeId);
-    const tradeDoc = await getDoc(tradeRef);
+    const tradeDoc = await getDoc(tradeRef); // Use getDoc to fetch a single document
 
     let updatedFields = {
       [field]:
@@ -223,7 +223,7 @@ const TradeList = () => {
       handleBlur();
     }
   };
-  
+
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilterConfig((prevState) => ({
@@ -290,7 +290,8 @@ const TradeList = () => {
           </select>
         </label>
       </div>
-            <button onClick={() => setIsModalOpen(true)}>Add New Trade</button>
+
+      <button onClick={() => setIsModalOpen(true)}>Add New Trade</button>
       {isModalOpen && (
         <TradeModal
           userId={user.uid}
@@ -353,31 +354,35 @@ const TradeList = () => {
               <tbody>
                 {sortedTrades(trades).map((trade) => (
                   <tr key={trade.id} className={getRowClass(trade)}>
-                    {["bought", "sold", "dateEntered", "dateSold", "ongoing"].map(
-                      (field) => (
-                        <td
-                          key={field}
-                          onDoubleClick={() =>
-                            handleDoubleClick(trade.id, field, trade[field])
-                          }
-                        >
-                          {editingField &&
-                          editingField.tradeId === trade.id &&
-                          editingField.field === field ? (
-                            <input
-                              type="text"
-                              value={editingValue}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              onKeyPress={handleKeyPress}
-                              autoFocus
-                            />
-                          ) : (
-                            trade[field]
-                          )}
-                        </td>
-                      )
-                    )}
+                    {[
+                      "bought",
+                      "sold",
+                      "dateEntered",
+                      "dateSold",
+                      "ongoing",
+                    ].map((field) => (
+                      <td
+                        key={field}
+                        onDoubleClick={() =>
+                          handleDoubleClick(trade.id, field, trade[field])
+                        }
+                      >
+                        {editingField &&
+                        editingField.tradeId === trade.id &&
+                        editingField.field === field ? (
+                          <input
+                            type="text"
+                            value={editingValue}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            onKeyPress={handleKeyPress}
+                            autoFocus
+                          />
+                        ) : (
+                          trade[field]
+                        )}
+                      </td>
+                    ))}
                     <td>{trade.difference}</td>
                     <td>{formatProfits(trade.profits)}</td>
                     <td>{trade.tradeLasted}</td>
@@ -401,6 +406,5 @@ const TradeList = () => {
     </div>
   );
 };
-
 
 export default TradeList;
