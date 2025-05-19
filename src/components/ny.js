@@ -2,10 +2,10 @@ import React, { useState, useContext, useEffect } from "react";
 import {
   collection,
   getDocs,
-  getDoc,
   doc,
+  getDoc,
   updateDoc,
-} from "firebase/firestore";
+} from "firebase/firestore"; // Ensure getDoc is imported
 import { useFetchData } from "../hooks/useFetchData";
 import "../styles/TradeList.css";
 import TradeModal from "./TradeModal";
@@ -129,7 +129,7 @@ const TradeList = () => {
         return "▼";
       }
     }
-    return "";
+    return "▲▼";
   };
 
   const formatProfits = (profits) => {
@@ -181,7 +181,7 @@ const TradeList = () => {
     const { tradeId, field } = editingField;
 
     const tradeRef = doc(db, "users", user.uid, "trades", tradeId);
-    const tradeDoc = await getDoc(tradeRef);
+    const tradeDoc = await getDoc(tradeRef); // Use getDoc to fetch a single document
 
     let updatedFields = {
       [field]:
@@ -259,43 +259,39 @@ const TradeList = () => {
 
   return (
     <div className="trade-list-container">
-      <div className="filters-card-container">
-     
-
-        <div className="filters-card">
-          
+      <div className="overall-stats-container">
         <h2>Overall Stats</h2>
-          <p>Total Trades: {overallStats.totalTrades}</p>
-          <p>Total Bought: $ {overallStats.totalBought}</p>
-          <p>Total Sold: $ {overallStats.totalSold}</p>
-          <p>Total Profits: {formatProfits(overallStats.totalProfits)}</p>
-          <h3>Sort & Filter</h3>
-          <div className="filters-container">
-            <label>
-              Filter by Coin:
-              <input
-                type="text"
-                name="coin"
-                value={filterConfig.coin}
-                onChange={handleFilterChange}
-              />
-            </label>
-            <label>
-              Filter by Ongoing:
-              <select
-                name="ongoing"
-                value={filterConfig.ongoing}
-                onChange={handleFilterChange}
-              >
-                <option value="all">All</option>
-                <option value="yes">Yes</option>
-                <option value="no">No</option>
-              </select>
-            </label>
-          </div>
-          <button onClick={() => setIsModalOpen(true)}>Add New Trade</button>
-        </div>
+        <p>Total Trades: {overallStats.totalTrades}</p>
+        <p>Total Bought: $ {overallStats.totalBought}</p>
+        <p>Total Sold: $ {overallStats.totalSold}</p>
+        <p>Total Profits: {formatProfits(overallStats.totalProfits)}</p>
       </div>
+
+      <div className="filters-container">
+        <label>
+          Filter by Coin:
+          <input
+            type="text"
+            name="coin"
+            value={filterConfig.coin}
+            onChange={handleFilterChange}
+          />
+        </label>
+        <label>
+          Filter by Ongoing:
+          <select
+            name="ongoing"
+            value={filterConfig.ongoing}
+            onChange={handleFilterChange}
+          >
+            <option value="all">All</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </label>
+      </div>
+
+      <button onClick={() => setIsModalOpen(true)}>Add New Trade</button>
       {isModalOpen && (
         <TradeModal
           userId={user.uid}
