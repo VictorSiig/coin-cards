@@ -78,3 +78,41 @@ tbody tr {
 .sell-button:focus {
   outline: none;
 }
+
+.filters-card-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.filters-card {
+  background-color: #f8f9fa; /* Light background color for distinction */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  width: 200%; /* Adjust width as necessary */
+  text-align: center;
+}
+
+.filters-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.filters-container label {
+  margin-right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.filters-container input,
+.filters-container select {
+  margin-top: 5px;
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
