@@ -31,7 +31,7 @@ const TradeList = () => {
   });
   const [existingCoins, setExistingCoins] = useState([]);
   const [editingField, setEditingField] = useState(null);
-  const [editingValue, setEditingValue] = useState("");  
+  const [editingValue, setEditingValue] = useState("");
   const [filterConfig, setFilterConfig] = useState({
     coin: "",
     ongoing: "all",
@@ -223,7 +223,7 @@ const TradeList = () => {
       handleBlur();
     }
   };
-  
+
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilterConfig((prevState) => ({
@@ -259,38 +259,43 @@ const TradeList = () => {
 
   return (
     <div className="trade-list-container">
-      <div className="overall-stats-container">
-        <h2>Overall Stats</h2>
-        <p>Total Trades: {overallStats.totalTrades}</p>
-        <p>Total Bought: $ {overallStats.totalBought}</p>
-        <p>Total Sold: $ {overallStats.totalSold}</p>
-        <p>Total Profits: {formatProfits(overallStats.totalProfits)}</p>
-      </div>
+      <div className="filters-card-container">
+     
 
-      <div className="filters-container">
-        <label>
-          Filter by Coin:
-          <input
-            type="text"
-            name="coin"
-            value={filterConfig.coin}
-            onChange={handleFilterChange}
-          />
-        </label>
-        <label>
-          Filter by Ongoing:
-          <select
-            name="ongoing"
-            value={filterConfig.ongoing}
-            onChange={handleFilterChange}
-          >
-            <option value="all">All</option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-          </select>
-        </label>
+        <div className="filters-card">
+          
+        <h2>Overall Stats</h2>
+          <p>Total Trades: {overallStats.totalTrades}</p>
+          <p>Total Bought: $ {overallStats.totalBought}</p>
+          <p>Total Sold: $ {overallStats.totalSold}</p>
+          <p>Total Profits: {formatProfits(overallStats.totalProfits)}</p>
+          <h3>Sort & Filter</h3>
+          <div className="filters-container">
+            <label>
+              Filter by Coin:
+              <input
+                type="text"
+                name="coin"
+                value={filterConfig.coin}
+                onChange={handleFilterChange}
+              />
+            </label>
+            <label>
+              Filter by Ongoing:
+              <select
+                name="ongoing"
+                value={filterConfig.ongoing}
+                onChange={handleFilterChange}
+              >
+                <option value="all">All</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            </label>
+          </div>
+          <button onClick={() => setIsModalOpen(true)}>Add New Trade</button>
+        </div>
       </div>
-            <button onClick={() => setIsModalOpen(true)}>Add New Trade</button>
       {isModalOpen && (
         <TradeModal
           userId={user.uid}
@@ -353,31 +358,35 @@ const TradeList = () => {
               <tbody>
                 {sortedTrades(trades).map((trade) => (
                   <tr key={trade.id} className={getRowClass(trade)}>
-                    {["bought", "sold", "dateEntered", "dateSold", "ongoing"].map(
-                      (field) => (
-                        <td
-                          key={field}
-                          onDoubleClick={() =>
-                            handleDoubleClick(trade.id, field, trade[field])
-                          }
-                        >
-                          {editingField &&
-                          editingField.tradeId === trade.id &&
-                          editingField.field === field ? (
-                            <input
-                              type="text"
-                              value={editingValue}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              onKeyPress={handleKeyPress}
-                              autoFocus
-                            />
-                          ) : (
-                            trade[field]
-                          )}
-                        </td>
-                      )
-                    )}
+                    {[
+                      "bought",
+                      "sold",
+                      "dateEntered",
+                      "dateSold",
+                      "ongoing",
+                    ].map((field) => (
+                      <td
+                        key={field}
+                        onDoubleClick={() =>
+                          handleDoubleClick(trade.id, field, trade[field])
+                        }
+                      >
+                        {editingField &&
+                        editingField.tradeId === trade.id &&
+                        editingField.field === field ? (
+                          <input
+                            type="text"
+                            value={editingValue}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            onKeyPress={handleKeyPress}
+                            autoFocus
+                          />
+                        ) : (
+                          trade[field]
+                        )}
+                      </td>
+                    ))}
                     <td>{trade.difference}</td>
                     <td>{formatProfits(trade.profits)}</td>
                     <td>{trade.tradeLasted}</td>
@@ -401,6 +410,5 @@ const TradeList = () => {
     </div>
   );
 };
-
 
 export default TradeList;
