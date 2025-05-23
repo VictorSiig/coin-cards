@@ -11,6 +11,7 @@ html, body {
   'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
   sans-serif;
   background: linear-gradient(to bottom, darkgray, lightgray);
+  background-attachment: fixed;
 }
 
 #root {
