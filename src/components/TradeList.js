@@ -260,11 +260,8 @@ const TradeList = () => {
   return (
     <div className="trade-list-container">
       <div className="filters-card-container">
-     
-
         <div className="filters-card">
-          
-        <h2>Overall Stats</h2>
+          <h2>Overall Stats</h2>
           <p>Total Trades: {overallStats.totalTrades}</p>
           <p>Total Bought: $ {overallStats.totalBought}</p>
           <p>Total Sold: $ {overallStats.totalSold}</p>
