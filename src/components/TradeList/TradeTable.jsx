@@ -1,5 +1,6 @@
 import { getRowClass } from "../../utilities/getRowClass";
 import { formatProfits } from "../../utilities/tradeUtils";
+import EditableCell from "./EditableCell";
 
 const TradeTable = ({
   trades,
@@ -10,8 +11,14 @@ const TradeTable = ({
   onSell,
   openSellModal,
 }) => {
-  const { editingField, editingValue, handleDoubleClick, handleChange, handleBlur, handleKeyPress } =
-    editing;
+  const {
+    editingField,
+    editingValue,
+    handleDoubleClick,
+    handleChange,
+    handleBlur,
+    handleKeyPress,
+  } = editing;
 
   const sortedTrades = [...trades].sort((a, b) => {
     let aVal = a[sortConfig.key];
@@ -29,39 +36,78 @@ const TradeTable = ({
     <table>
       <thead>
         <tr>
-          {["bought", "sold", "difference", "profits", "dateEntered", "dateSold", "tradeLasted", "ongoing"].map((field) => (
-            <th key={field} onClick={() => requestSort(field)}>
-              {field.charAt(0).toUpperCase() + field.slice(1)} {getSortSymbol(field)}
-            </th>
-          ))}
+          <th onClick={() => requestSort("bought")}>Bought {getSortSymbol("bought")}</th>
+          <th onClick={() => requestSort("sold")}>Sold {getSortSymbol("sold")}</th>
+          <th onClick={() => requestSort("difference")}>Difference {getSortSymbol("difference")}</th>
+          <th onClick={() => requestSort("profits")}>Profits {getSortSymbol("profits")}</th>
+          <th onClick={() => requestSort("dateEntered")}>Date Entered {getSortSymbol("dateEntered")}</th>
+          <th onClick={() => requestSort("dateSold")}>Date Sold {getSortSymbol("dateSold")}</th>
+          <th onClick={() => requestSort("tradeLasted")}>Trade Lasted {getSortSymbol("tradeLasted")}</th>
+          <th onClick={() => requestSort("ongoing")}>Ongoing {getSortSymbol("ongoing")}</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
         {sortedTrades.map((trade) => (
           <tr key={trade.id} className={getRowClass(trade)}>
-            {["bought", "sold", "dateEntered", "dateSold", "ongoing"].map((field) => (
-              <td
-                key={field}
-                onDoubleClick={() => handleDoubleClick(trade.id, field, trade[field])}
-              >
-                {editingField?.tradeId === trade.id && editingField.field === field ? (
-                  <input
-                    type="text"
-                    value={editingValue}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    onKeyPress={handleKeyPress}
-                    autoFocus
-                  />
-                ) : (
-                  trade[field]
-                )}
-              </td>
-            ))}
+            <EditableCell
+              tradeId={trade.id}
+              field="bought"
+              value={trade.bought}
+              editingField={editingField}
+              editingValue={editingValue}
+              onDoubleClick={handleDoubleClick}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              onKeyPress={handleKeyPress}
+            />
+            <EditableCell
+              tradeId={trade.id}
+              field="sold"
+              value={trade.sold}
+              editingField={editingField}
+              editingValue={editingValue}
+              onDoubleClick={handleDoubleClick}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              onKeyPress={handleKeyPress}
+            />
             <td>{trade.difference}</td>
             <td>{formatProfits(trade.profits)}</td>
+            <EditableCell
+              tradeId={trade.id}
+              field="dateEntered"
+              value={trade.dateEntered}
+              editingField={editingField}
+              editingValue={editingValue}
+              onDoubleClick={handleDoubleClick}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              onKeyPress={handleKeyPress}
+            />
+            <EditableCell
+              tradeId={trade.id}
+              field="dateSold"
+              value={trade.dateSold}
+              editingField={editingField}
+              editingValue={editingValue}
+              onDoubleClick={handleDoubleClick}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              onKeyPress={handleKeyPress}
+            />
             <td>{trade.tradeLasted}</td>
+            <EditableCell
+              tradeId={trade.id}
+              field="ongoing"
+              value={String(trade.ongoing)}
+              editingField={editingField}
+              editingValue={editingValue}
+              onDoubleClick={handleDoubleClick}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              onKeyPress={handleKeyPress}
+            />
             <td>
               {!trade.sold && (
                 <button
