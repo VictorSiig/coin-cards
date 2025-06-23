@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import TradeList from './components/TradeList';
+import TradeListMain from './components/TradeList/TradeListMain';
 import Login from './pages/Login';
 import './styles/Login.css';
 
@@ -10,7 +10,7 @@ function App() {
       <div className="Login">
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/trades" element={<TradeList />} />
+          <Route path="/trades" element={<TradeListMain />} />
         </Routes>
       </div>
     </Router>
